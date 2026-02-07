@@ -21,14 +21,15 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        z-index: 1;
     }
 
     .pink-box {
-        background: #ffb6c1; /* Pink */
+        background: #ffb6c1;
         padding: 40px;
         border-radius: 22px;
         width: 440px;
-        font-size: 22px; /* Bigger font */
+        font-size: 22px;
         font-weight: bold;
         color: #7a003c;
         margin-bottom: 30px;
@@ -37,44 +38,69 @@
 
     .buttons {
         width: 440px;
-        height: 75px;
-        position: relative;
         display: flex;
         justify-content: center;
-        align-items: center;
+        gap: 14px;
     }
 
     .btn {
         height: 75px;
+        width: 210px;
         border-radius: 16px;
         border: none;
         font-size: 22px;
         font-weight: bold;
         cursor: pointer;
+        background: #ff4d4d;
         color: black;
-        transition: all 0.5s ease;
-        position: absolute;
-        top: 0;
+        transition: transform 0.2s ease;
     }
 
-    #yesBtn {
-        background: #ff4d4d; /* red */
-        width: 210px;
-        left: 0;
-        z-index: 2;
+    .btn:active {
+        transform: scale(0.95);
     }
 
-    #noBtn {
-        background: #ff4d4d; /* red */
-        width: 210px;
-        left: 230px; /* start to the right */
-        z-index: 1;
+    /* WARNING FLASH */
+    .flash {
+        position: fixed;
+        inset: 0;
+        background: rgba(255, 0, 0, 0.6);
+        animation: flash 0.15s alternate 6;
+        z-index: 5;
     }
 
+    @keyframes flash {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* NOT AN OPTION BOX */
+    .warning-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: black;
+        color: white;
+        padding: 40px 60px;
+        font-size: 42px;
+        font-weight: bold;
+        border-radius: 20px;
+        z-index: 10;
+        animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+        from { transform: translate(-50%, -50%) scale(0.7); }
+        to { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* HEARTS */
     .heart {
         position: fixed;
         font-size: 26px;
         animation: floatUp 3s linear forwards;
+        z-index: 20;
     }
 
     @keyframes floatUp {
@@ -82,11 +108,13 @@
         to { transform: translateY(-800px); opacity: 0; }
     }
 
+    /* CONFETTI */
     .confetti {
         position: fixed;
         width: 10px;
         height: 10px;
         animation: fall 3s linear forwards;
+        z-index: 20;
     }
 
     @keyframes fall {
@@ -95,10 +123,10 @@
     }
 </style>
 </head>
+
 <body>
 
 <div class="container">
-
     <div class="pink-box">
         As the last request of the patient for the treatment regimen<br><br>
         The patient would like you to be his valentine<br><br>
@@ -109,29 +137,29 @@
         <button id="yesBtn" class="btn">YES!</button>
         <button id="noBtn" class="btn">NO</button>
     </div>
-
 </div>
 
 <script>
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
 
-    let yesWidth = 210;
-    let yesLeft = 0;
-
     noBtn.addEventListener("click", () => {
-        // Increase YES width and move it over NO
-        yesWidth += 60;
-        yesLeft -= 30; // move left as it grows
-        yesBtn.style.width = yesWidth + "px";
-        yesBtn.style.left = yesLeft + "px";
+        // Flash warning
+        const flash = document.createElement("div");
+        flash.className = "flash";
+        document.body.appendChild(flash);
 
-        // Fully cover NO and hide it
-        if (yesWidth >= 440) {
-            yesBtn.style.width = "440px";
-            yesBtn.style.left = "0px";
-            noBtn.style.display = "none";
-        }
+        // Warning box
+        const warning = document.createElement("div");
+        warning.className = "warning-box";
+        warning.innerText = "NOT AN OPTION";
+        document.body.appendChild(warning);
+
+        // Remove after delay
+        setTimeout(() => {
+            flash.remove();
+            warning.remove();
+        }, 1200);
     });
 
     yesBtn.addEventListener("click", () => {
