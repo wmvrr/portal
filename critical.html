@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Critical Patient!</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Full-screen side-blending gradient blinking */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: ambulanceGradient 1s infinite;
+        }
+
+        @keyframes ambulanceGradient {
+            0%, 50%, 100% {
+                background: linear-gradient(to right, red, blue);
+            }
+            25%, 75% {
+                background: linear-gradient(to right, blue, red);
+            }
+        }
+
+        /* Black alert box */
+        .alert-box {
+            background-color: black;
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(255,255,255,0.4);
+            z-index: 1;
+        }
+
+        /* Muahh button */
+        .muahh-btn {
+            background-color: #1E90FF; /* initial blue */
+            color: white;
+            padding: 20px 40px;
+            border-radius: 12px;
+            font-size: 22px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .muahh-btn:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="alert-box">
+        HURRY! The patient is in critical condition.<br>
+        He needs <strong>Five kisses IMMEDIATELY</strong>.
+    </div>
+
+    <button class="muahh-btn" id="muahhBtn">Muahh</button>
+
+    <script>
+        let clickCount = 0;
+        const btn = document.getElementById('muahhBtn');
+        const colors = ["#1E90FF", "#FF1493", "#32CD32", "#FFD700", "#FF4500"];
+
+        btn.addEventListener('click', () => {
+            clickCount++;
+
+            // double the font size on each click
+            let newFontSize = 22 * Math.pow(2, clickCount);
+            btn.style.fontSize = newFontSize + 'px';
+
+            // double padding proportionally
+            let newPaddingY = 20 * Math.pow(2, clickCount);
+            let newPaddingX = 40 * Math.pow(2, clickCount);
+            btn.style.padding = `${newPaddingY}px ${newPaddingX}px`;
+
+            // change color each click
+            btn.style.backgroundColor = colors[clickCount % colors.length];
+
+            // redirect exactly on 5th click
+            if (clickCount === 5) {
+                window.location.href = 'final.html';
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Stabilized!</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+
+        /* Container for pink box + button */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+
+        /* Pink box */
+        .alert-box {
+            background-color: pink;
+            color: black;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 22px;
+            margin-top: 20px;
+            opacity: 0; /* appear later */
+            transition: opacity 1s ease;
+        }
+
+        /* Red Yayyy button */
+        .yay-btn {
+            background-color: red;
+            color: black;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 40px; /* lower position */
+            opacity: 0; /* appear later */
+            transition: opacity 1s ease;
+        }
+
+        .yay-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* Hearts style */
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #FF1493;
+            opacity: 0.8;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-800px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Confetti canvas */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="alert-box" id="alertBox">
+            PHEW! The patient is stable now
+        </div>
+
+        <button class="yay-btn" id="yayBtn">Yayyy</button>
+    </div>
+
+    <canvas id="confetti"></canvas>
+
+    <script>
+        const alertBox = document.getElementById('alertBox');
+        const yayBtn = document.getElementById('yayBtn');
+
+        // Step 1: show pink box and button after short delay
+        setTimeout(() => {
+            alertBox.style.opacity = 1;
+            yayBtn.style.opacity = 1;
+
+            // Step 2: start hearts floating
+            generateHearts(30); // number of hearts
+        }, 500);
+
+        // Step 3: Yayyy button click → confetti + redirect
+        yayBtn.addEventListener('click', () => {
+    launchConfetti();
+
+    // redirect after 2 seconds to the diagnosis page
+    setTimeout(() => {
+        window.location.href = 'diagnosis.html';
+    }, 2000);
+});
+
+
+        // Function to generate hearts
+        function generateHearts(count) {
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerText = '❤️';
+                heart.style.left = Math.random() * window.innerWidth + 'px';
+                heart.style.fontSize = (10 + Math.random() * 30) + 'px';
+                heart.style.animationDuration = (3 + Math.random() * 5) + 's';
+                heart.style.animationDelay = Math.random() + 's';
+                document.body.appendChild(heart);
+
+                // remove heart after animation
+                heart.addEventListener('animationend', () => {
+                    heart.remove();
+                    // optionally, create a new heart to keep hearts continuous
+                    generateHearts(1);
+                });
+            }
+        }
+
+        // Confetti JS
+        function launchConfetti() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const confettiCount = 150;
+            const confetti = [];
+
+            for (let i = 0; i < confettiCount; i++) {
+                confetti.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * confettiCount,
+                    color: `hsl(${Math.random()*360}, 100%, 50%)`,
+                    tilt: Math.random() * 10 - 10,
+                    tiltAngleIncrement: Math.random() * 0.07 + 0.05,
+                    tiltAngle: 0
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                confetti.forEach(c => {
+                    ctx.beginPath();
+                    ctx.lineWidth = c.r;
+                    ctx.strokeStyle = c.color;
+                    ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+                    ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 2);
+                    ctx.stroke();
+                });
+                update();
+            }
+
+            function update() {
+                confetti.forEach(c => {
+                    c.tiltAngle += c.tiltAngleIncrement;
+                    c.y += (Math.cos(c.d) + 3 + c.r / 2) / 2;
+                    c.x += Math.sin(c.d);
+                    c.tilt = Math.sin(c.tiltAngle) * 15;
+
+                    if (c.y > canvas.height) {
+                        c.y = -10;
+                        c.x = Math.random() * canvas.width;
+                    }
+                });
+            }
+
+            let anim = setInterval(draw, 20);
+
+            // stop confetti after 2 seconds
+            setTimeout(() => {
+                clearInterval(anim);
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html>

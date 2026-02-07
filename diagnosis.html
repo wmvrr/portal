@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnosis Question</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        .question-box {
+            background-color: pink;
+            padding: 30px 40px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .option-btn {
+            background-color: white;
+            color: black;
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 10px 0;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            opacity: 0.85;
+        }
+
+        .option-btn.correct {
+            background-color: #4CAF50; /* green */
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .option-btn.wrong {
+            background-color: #f44336; /* red */
+            color: white;
+            border-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="question-box">
+        What's your diagnosis?
+    </div>
+
+    <div class="options">
+        <button class="option-btn" data-answer="wrong">A. He's tweaking</button>
+        <button class="option-btn" data-answer="wrong">B. Medically Unexplained Symptoms (MUS)</button>
+        <button class="option-btn" data-answer="correct">C. He's in love</button>
+        <button class="option-btn" data-answer="wrong">D. Enay nai bachna enu lor lejao</button>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('.option-btn');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+if (btn.dataset.answer === 'correct') {
+    btn.classList.add('correct');
+
+    // redirect to treatment_request.html after delay
+    setTimeout(() => {
+        window.location.href = 'treatment_request.html';
+    }, 1000);
+}
+ else {
+                    // wrong answer clicked
+                    btn.classList.add('wrong');
+
+                    // reset only this button after 0.8s
+                    setTimeout(() => {
+                        btn.classList.remove('wrong');
+                        btn.style.backgroundColor = 'white';
+                        btn.style.color = 'black';
+                        btn.style.borderColor = '#ccc';
+                    }, 800);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

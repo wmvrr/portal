@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Treatment Discussion</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Pink message box */
+        .pink-box {
+            background-color: pink;
+            color: black;
+            padding: 30px 35px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 22px;
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        /* Red button */
+        .list-btn {
+            background-color: red;
+            color: black;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 45px;
+            font-size: 20px;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .list-btn:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="pink-box">
+            Miss competent doctor has already made the diagnosis  
+            <br><strong>HOWEVER</strong><br>
+            The patient is skeptical and asks the following things be added in his treatment regimen
+        </div>
+
+        <button class="list-btn" onclick="goNext()">
+            Give me the list
+        </button>
+    </div>
+
+    <script>
+        function goNext() {
+            window.location.href = 'treatment_list.html'; 
+            // change this filename to whatever page you want next
+        }
+    </script>
+
+</body>
+</html>
