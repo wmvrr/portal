@@ -1,39 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Mwah 💋</title>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #ffe6f0;
-            font-family: Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<title>Sealed Letter</title>
 
-        .mwah {
-            font-size: 80px;
-            font-weight: bold;
-            color: #ff1493;
-            animation: pop 1.5s ease-in-out infinite alternate;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap" rel="stylesheet">
 
-        @keyframes pop {
-            from {
-                transform: scale(1);
-            }
-            to {
-                transform: scale(1.15);
-            }
-        }
-    </style>
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: #24160e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ================= ENVELOPE ================= */
+
+.envelope {
+  position: relative;
+  width: 520px;
+  height: 340px;
+  background: #d0ae87;
+  border-radius: 10px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+  overflow: hidden;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* more intense paper grain + stains */
+.envelope::before {
+  content: "";
+  position: absolute;
+  inset: -15px;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(100,70,40,0.2), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(90,60,30,0.18), transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(80,55,30,0.15), transparent 40%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.06),
+      rgba(255,255,255,0.06) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0.04),
+      rgba(0,0,0,0.04) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+/* feathered worn edges */
+.envelope::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+}
+
+/* ================= FLAPS ================= */
+
+/* top flap (front) */
+.flap-top {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 40%);
+  background: #caa57d;
+  z-index: 5;
+}
+
+/* bottom flap (behind) */
+.flap-bottom {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 100%, 100% 100%, 50% 40%);
+  background: #d6b48d;
+  z-index: 1;
+}
+
+/* left flap */
+.flap-left {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 50% 40%, 0 100%);
+  background: #c1a078;
+  z-index: 3;
+}
+
+/* right flap */
+.flap-right {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(100% 0, 100% 100%, 50% 40%);
+  background: #b89971;
+  z-index: 3;
+}
+
+/* ================= WAX SEAL ================= */
+
+.seal {
+  position: absolute;
+  top: 30%;          /* closer to top */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95px;
+  height: 95px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.seal svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 14px 26px rgba(0,0,0,0.7));
+  transition: transform 0.3s ease;
+}
+
+.seal:hover svg {
+  transform: scale(1.08);
+}
+
+/* ================= LETTER ================= */
+
+.letter {
+  display: none;
+  background: #f4e4c4;
+  width: min(90vw, 650px);
+  max-height: 85vh;
+  padding: 45px;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 0 40px rgba(0,0,0,0.18),
+    0 30px 60px rgba(0,0,0,0.6);
+  font-family: 'Homemade Apple', cursive;
+  color: #3a1e0f;
+  font-size: 20px;
+  line-height: 1.85;
+  overflow-y: auto;
+  animation: reveal 1s ease forwards;
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.letter p { margin-bottom: 22px; }
+
+.sign {
+  margin-top: 35px;
+  text-align: right;
+  font-size: 22px;
+}
+</style>
 </head>
+
 <body>
 
-    <div class="mwah">mwahhhhhhh</div>
+<!-- ENVELOPE -->
+<div class="envelope" id="envelope">
+  <div class="flap-bottom"></div>
+  <div class="flap-left"></div>
+  <div class="flap-right"></div>
+  <div class="flap-top"></div>
+
+  <!-- TEXTURED BROWN WAX SEAL -->
+  <div class="seal" onclick="openLetter()">
+    <svg viewBox="0 0 200 200">
+      <defs>
+        <radialGradient id="waxGrad" cx="35%" cy="30%">
+          <stop offset="0%" stop-color="#7b4b2a"/>
+          <stop offset="60%" stop-color="#4a2915"/>
+          <stop offset="100%" stop-color="#2b150b"/>
+        </radialGradient>
+
+        <filter id="waxNoise">
+          <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="4"/>
+          <feDisplacementMap in="SourceGraphic" scale="12"/>
+        </filter>
+      </defs>
+
+      <path
+        d="M45,100
+           C35,65 75,35 120,45
+           C160,55 175,90 165,125
+           C155,165 110,175 75,160
+           C50,145 35,125 45,100Z"
+        fill="url(#waxGrad)"
+        filter="url(#waxNoise)"
+      />
+    </svg>
+  </div>
+</div>
+
+<!-- LETTER -->
+<div class="letter" id="letter">
+  <p>My Dearest,</p>
+
+  <p>
+    These words were kept beneath wax and waiting,
+    until the hour they might reach thee.
+    In all my days, it is thy presence
+    that steadies my heart.
+  </p>
+
+  <p>
+    Thou art warmth without demand,
+    strength without force,
+    and a kindness rarer than gold.
+  </p>
+
+  <p>
+    Whatever pages time yet turns,
+    know this truth —
+    my choosing of thee is deliberate and true.
+  </p>
+
+  <p>
+    Keep these words close,
+    as I keep thee —
+    with care, with loyalty,
+    and with love that does not fade.
+  </p>
+
+  <div class="sign">
+    Yours always,<br>
+    <strong>Umer</strong>
+  </div>
+</div>
+
+<script>
+function openLetter() {
+  const envelope = document.getElementById("envelope");
+  const letter = document.getElementById("letter");
+
+  envelope.style.opacity = "0";
+  envelope.style.transform = "scale(0.92)";
+
+  setTimeout(() => {
+    envelope.style.display = "none";
+    letter.style.display = "block";
+  }, 600);
+}
+</script>
 
 </body>
 </html>
